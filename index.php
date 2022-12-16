@@ -13,13 +13,58 @@
   <body>
 
   <?php
-    $test = "Testna varijabla"; 
+  $host = "localhost";
+  $username = "root";
+  $password = "";
+  $dbname = "pzi_fpmoz";
+
+   $db = new mysqli($host,$username,$password,$dbname);
+
+    // Check connection
+  if ($db->connect_error) {
+  die("Connection failed: " . $db->connect_error);}
+echo "Connected successfully";
+
+  $query = "SELECT first_name,last_name from users";
+
+  $result = $db->query($query);
+
+  /*$row = $result->fetch_assoc();
+
+  var_dump($row);*/
+
+  //Unos korisnika u bazu ako je poslan POST request
+  if($_SERVER["REQUEST_METHOD"] ==="POST") {
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
+    $password = $_POST["password"];
+
+    echo "Usao u funkciju za kreiranje usera";
+
+    $query = "INSERT INTO users(first_name,last_name,password)"; 
+    $query .= "VALUES ('$first_name','$last_name',' $password')";
+
+    $result = $db->query($query);
+
+    if (!$result) {
+      var_dump($db->error);
+    }
+  }
+
+
+?>  
+
+  <?php
+    $test = "<h1>Testna varijabla</h1>"; 
+    $test2 = "";
+    $test .= $test2; 
     echo $test;
   ?>
 
 <form method = "post">
-Name: <input type="text" name="name"><br>
-E-mail: <input type="text" name="email"><br>
+First name: <input type="text" name="first_name"><br>
+Last name: <input type="text" name="last_name"><br>
+Password: <input type="password" name="password">
 <input type="submit">
 </form>
 
